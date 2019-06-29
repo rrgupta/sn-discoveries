@@ -1,17 +1,14 @@
 #!/usr/bin/env python
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.animation as anim
 import pandas as pd
 from astropy.coordinates import SkyCoord
 import astropy.units as u
-from IPython import embed
-import subprocess
+import matplotlib.pyplot as plt
 plt.rc('font', family='serif')
 """
 Create animation of supernova discoveries based on data 
 from the Open Supernova Catalog obtained using their API 
-https://api.sne/space/ (retrieved 27 June 2019)
+https://api.sne/space/ (retrieved 29 June 2019)
 """
 
 # Download data 
@@ -43,10 +40,7 @@ print 'Converting sexigesimal string of coordinates to astropy SkyCoord . . .'
 coords = SkyCoord(ra=RA, dec=Dec, unit=(u.hour, u.deg))
 years = np.asarray([ d.year for d in data['date'][isSN | hasSN] ])
 
-#print np.unique(data['claimedtype'][isSN | hasSN])
-
 # Plot
-images = []
 for i, y in enumerate(range(1885, 2020)):
     fig = plt.figure(figsize=(8, 4))
     ax = fig.add_subplot(111, projection='mollweide')
@@ -64,7 +58,6 @@ for i, y in enumerate(range(1885, 2020)):
     fig.tight_layout()
     imgname = 'SN_{}.png'.format(str(y))
     fig.savefig(imgname)
-    images.append(imgname)
     plt.close()
 
 # To create gif animation with ImageMagick with 
