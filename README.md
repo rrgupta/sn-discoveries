@@ -8,6 +8,9 @@ using the <a href="https://github.com/astrocatalogs/OACAPI">Open Astronomy Catal
 plots the sky locations of supernovae over time from 1885 to the present. A series of plots are
 generated, and then I use ImageMagick to compile them into a gif animation.
 
+This code is based in part on <a href="https://commons.wikimedia.org/wiki/File:Sn_discoveries.gif">
+code</a> written by Rollin Thomas.
+
 Python
 ------
 
