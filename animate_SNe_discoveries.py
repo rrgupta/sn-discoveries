@@ -9,7 +9,7 @@ plt.rc('font', family='serif')
 Create animation of supernova discoveries using public data from the 
 Open Supernova Catalog obtained using their API https://api.sne/space/ 
 (retrieved 30 June 2019)
-Based in part on code from Rollin Thomas located here:
+Based in part on code from RCThomas located here:
 https://commons.wikimedia.org/wiki/File:Sn_discoveries.gif
 """
 
