@@ -13,7 +13,7 @@ Based in part on code from RCThomas located here:
 https://commons.wikimedia.org/wiki/File:Sn_discoveries.gif
 """
 
-# Download data 
+### DOWNLOAD DATA ###
 cols = 'name+ra+dec+discoverdate+discoverer+claimedtype' # columns to download
 args = 'sortby=discoverdate&format=csv'
 url = 'https://api.sne.space/catalog/{}?{}'.format(cols, args)
@@ -22,24 +22,24 @@ print 'Retrieving data from {} . . .'.format(url)
 data = pd.read_csv(url, error_bad_lines=False)
 
 ### CLEAN DATA ###
-# Convert date to Timestamp, NaN if format not recognized
+# Convert date to Timestamp; NaN if format not recognized
 data['date'] = pd.to_datetime(data['discoverdate'], errors='coerce')
 
-# Remove rows containing NaNs values for coordinates and date
+# Remove rows containing NaN values for coordinates and date
 req_cols = ['ra','dec','date']
 data.dropna(subset=req_cols, inplace=True)
 
-# Keep only bonafide SN types
+# Keep only bona fide SN types
 data.claimedtype.fillna('', inplace=True) # convert Nan types to empty string
 isSN = np.asarray([ (('Ia' in i) or ('Ib' in i) or ('Ic' in i) or (i == 'I') \
           or ('II' in i)) for i in data['claimedtype'] ])
-hasSN = np.asarray([ 'SN1' in i for i in data['name'] ])# 'SN1' in the name
+hasSN = np.asarray([ 'SN1' in i for i in data['name'] ]) # 'SN1' in the name
 
 years = np.asarray([ d.year for d in data['date'][isSN | hasSN] ])
 surveys = np.asarray(data['discoverer'][isSN | hasSN], dtype=str)
 names = np.asarray(data['name'][isSN | hasSN], dtype=str)
 
-# Use the 1st coordinate if multiple coordinates listed
+# Use the 1st coordinate if multiple coordinates listed in database
 RA = [ i.split(',')[0] for i in data['ra'][isSN | hasSN] ] 
 Dec = [ i.split(',')[0] for i in data['dec'][isSN | hasSN] ]
 print 'Converting sexigesimal string of coordinates to astropy SkyCoord . . .'
@@ -83,7 +83,7 @@ for i, survey in enumerate(surveys):
         colors.append('lime')
 colors = np.asarray(colors)
 
-# Plot
+### PLOT ###
 survey_used = []
 color_used = []
 for i, y in enumerate(range(1885, 2020)):
@@ -117,7 +117,7 @@ for i, y in enumerate(range(1885, 2020)):
     fig.savefig('SN_{}.png'.format(str(y)))
     plt.close()
 
-# To create gif animation with ImageMagick with 
-# delay of 30/100 s between each frame and infinite loop, 
+# To create a GIF animation using ImageMagick with a 
+# delay of 30/100 s between each frame and infinite looping, 
 # type the following on the command line in this directory:
 # convert -delay 30 -loop 0 SN_*.png SN_Discoveries.gif
